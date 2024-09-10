@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, getDoc, collection, query, where, and, getDocs, addDoc } from "firebase/firestore";
+import { getFirestore, doc, getDoc, collection, query, where, and, getDocs, addDoc, setDoc } from "firebase/firestore";
 import crypto from "crypto"
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -76,4 +76,62 @@ export async function populateTeams(rawCSV: string){
         await addDoc(teamRef, row);
     }
 
+}
+
+export async function getTeams(){
+    const teamRef = collection(db, "teams");
+    const teamQuery = query(teamRef);
+
+    const teamSnapshot = await getDocs(teamQuery);
+    
+    const teams: Player[] = [];
+    for(const teamData of teamSnapshot.docs){
+        teams.push(teamData.data() as Player)
+    }
+
+    return teams;
+}
+
+export async function incrementTeamScore(team: string){
+    const teamRef = collection(db, "teams");
+    const teamQuery = query(teamRef, where("name", "==", team));
+
+    const teamSnapshot = await getDocs(teamQuery);
+
+    if(teamSnapshot.empty){
+        throw new Error("No team found");
+    }else{
+        const id = teamSnapshot.docs[0].id;
+
+        const teamData = teamSnapshot.docs[0].data() as Player
+
+        await setDoc(doc(db, "teams", id), {
+            score: teamData.score + 10,
+            history: teamData.history.concat(10),
+            name: teamData.name,
+            lead: teamData.lead
+        })
+    }
+}
+
+export async function decrementTeamScore(team: string){
+    const teamRef = collection(db, "teams");
+    const teamQuery = query(teamRef, where("name", "==", team));
+
+    const teamSnapshot = await getDocs(teamQuery);
+
+    if(teamSnapshot.empty){
+        throw new Error("No team found");
+    }else{
+        const id = teamSnapshot.docs[0].id;
+
+        const teamData = teamSnapshot.docs[0].data() as Player
+
+        await setDoc(doc(db, "teams", id), {
+            score: teamData.score - 10,
+            history: teamData.history.concat(-10),
+            name: teamData.name,
+            lead: teamData.lead
+        })
+    }
 }

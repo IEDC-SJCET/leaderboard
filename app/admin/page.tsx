@@ -1,3 +1,4 @@
+"use client"
 import {
     AlertDialog,
     AlertDialogAction,
@@ -13,9 +14,16 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 
-import { importCSVAction } from "./actions"
+import { importCSVAction, incrementTeamScoreAction, decrementTeamScoreAction } from "./actions"
 
-export default function Admin(){
+import { Leaderboard } from "@/components/leaderboard"
+import { getTeams } from "@/lib/db"
+
+import { useQuery } from "@tanstack/react-query"
+
+export default function Admin() {
+    const {data} = useQuery({ queryKey: ["teams"], queryFn: () => getTeams(), refetchInterval: 500 })
+    
     return (
         <div className="flex flex-col gap-3 p-5">
             <AlertDialog>
@@ -26,7 +34,7 @@ export default function Admin(){
                     <AlertDialogTitle>Import from CSV table</AlertDialogTitle>
                     <form action={importCSVAction} className="flex flex-col gap-3">
                         <Label>Upload File</Label>
-                        <Input type="file" name="file"/>
+                        <Input type="file" name="file" />
                         <AlertDialogFooter>
                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                             <AlertDialogAction asChild>
@@ -36,6 +44,7 @@ export default function Admin(){
                     </form>
                 </AlertDialogContent>
             </AlertDialog>
+            <Leaderboard teams={data ?? []} title="Teams" incrementScore={incrementTeamScoreAction} decrementScore={decrementTeamScoreAction} admin />
         </div>
     )
 }

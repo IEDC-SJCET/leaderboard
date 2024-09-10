@@ -3,6 +3,9 @@
 import React from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import { Button } from './ui/button'
+
+import { Plus, Minus } from 'lucide-react'
 
 type Player = {
   id: number
@@ -18,7 +21,13 @@ const players: Player[] = [
   { id: 5, name: "Eve", score: 950 },
 ]
 
-export function Leaderboard({teams, title}: {teams: Player[], title: string}) {
+export function Leaderboard({teams, title, admin=false, incrementScore=(team) => {}, decrementScore=(team) => {}}: {
+  teams: Player[], 
+  title: string,
+  admin?: boolean,
+  incrementScore?: (team: string) => void,
+  decrementScore?: (team: string) => void
+}) {
   const sortedPlayers = [...teams].sort((a, b) => b.score - a.score)
 
   return (
@@ -30,19 +39,33 @@ export function Leaderboard({teams, title}: {teams: Player[], title: string}) {
             <TableHead className="w-[100px]">Rank</TableHead>
             <TableHead>Name</TableHead>
             <TableHead className="text-right">Score</TableHead>
+            {
+              admin && <TableHead>Actions</TableHead>
+            }
           </TableRow>
         </TableHeader>
         <TableBody>
           {sortedPlayers.map((player, index) => (
             <TableRow key={player.id} className="hover:bg-muted/50 transition-colors">
-              <TableCell className="font-medium">
+              <TableCell key={player.id} className="font-medium">
                 {index === 0 && <Badge className="bg-yellow-500">1st</Badge>}
                 {index === 1 && <Badge className="bg-gray-400">2nd</Badge>}
                 {index === 2 && <Badge className="bg-amber-600">3rd</Badge>}
                 {index > 2 && `${index + 1}th`}
               </TableCell>
-              <TableCell>{player.name}</TableCell>
-              <TableCell className="text-right">{player.score}</TableCell>
+              <TableCell key={player.id}>{player.name}</TableCell>
+              <TableCell className="text-right" key={player.id}>{player.score}</TableCell>
+              {
+                admin &&
+                <TableCell className='flex flex-row gap-2 w-fit' key={player.id}>
+                  <Button onClick={() => incrementScore(player.name)}>
+                    <Plus/>
+                  </Button>
+                  <Button onClick={() => decrementScore(player.name)}>
+                    <Minus/>
+                  </Button>
+                </TableCell>
+              }
             </TableRow>
           ))}
         </TableBody>
