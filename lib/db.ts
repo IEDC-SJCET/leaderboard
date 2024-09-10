@@ -19,13 +19,13 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-type User = {
+export type User = {
     id: string
     email: string
     password: string
 }
 
-type Player = {
+export type Player = {
     id: number
     lead: string
     name: string
