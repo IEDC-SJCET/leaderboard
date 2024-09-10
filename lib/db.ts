@@ -63,7 +63,7 @@ export async function populateTeams(rawCSV: string){
         const fields = row.split(",");
         return {
             name: fields[0],
-            lead: fields[1],
+            lead: fields[2],
             score: 0,
             history: []
         }
@@ -72,6 +72,7 @@ export async function populateTeams(rawCSV: string){
     const teamRef = collection(db, "teams");
 
     for(const row of rows){
+        //console.log(row)
         await addDoc(teamRef, row);
     }
 
