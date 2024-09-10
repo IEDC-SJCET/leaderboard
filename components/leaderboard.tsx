@@ -13,15 +13,7 @@ type Player = {
   score: number
 }
 
-const players: Player[] = [
-  { id: 1, name: "Alice", score: 1000 },
-  { id: 2, name: "Bob", score: 850 },
-  { id: 3, name: "Charlie", score: 900 },
-  { id: 4, name: "David", score: 750 },
-  { id: 5, name: "Eve", score: 950 },
-]
-
-export function Leaderboard({teams, title, admin=false, incrementScore=(team) => {}, decrementScore=(team) => {}}: {
+export function Leaderboard({teams, title, admin=false, incrementScore=() => {}, decrementScore=() => {}}: {
   teams: Player[], 
   title: string,
   admin?: boolean,
