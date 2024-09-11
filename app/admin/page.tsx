@@ -18,18 +18,18 @@ import { Leaderboard } from "@/components/leaderboard";
 import { getTeams } from "@/lib/db";
 
 import { useQuery } from "@tanstack/react-query";
-import { useState, useEffect } from "react";
+// import { useState, useEffect } from "react";
 
 export default function Admin() {
-  const [id, setId] = useState<number>(0);
-  const { data, refetch } = useQuery({
+  //   const [id, setId] = useState<number>(0);
+  const { data } = useQuery({
     queryKey: ["teams"],
     queryFn: () => getTeams(),
   });
 
-  useEffect(() => {
-    refetch();
-  }, [id]);
+  //   useEffect(() => {
+  //     refetch();
+  //   }, [id]);
 
   return (
     <div className="flex flex-col gap-3 p-5">

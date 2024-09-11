@@ -10,8 +10,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { updateScore } from "@/lib/db";
+// import { Input } from "@/components/ui/input";
+// import { updateScore } from "@/lib/db";
 
 type Player = {
   id: number;
@@ -36,16 +36,16 @@ export function Leaderboard({
 LeaderboardProps) {
   const sortedPlayers = [...teams].sort((a, b) => b.score - a.score);
 
-  const handleScoreChange = async (player: Player, newScore: number) => {
-    try {
-      // Ensure newScore is a valid number
-      if (isNaN(newScore)) return;
-      // Update the score in the database
-      await updateScore(player.name, newScore);
-    } catch (error) {
-      console.error("Failed to update score:", error);
-    }
-  };
+  // const handleScoreChange = async (player: Player, newScore: number) => {
+  //   try {
+  //     // Ensure newScore is a valid number
+  //     if (isNaN(newScore)) return;
+  //     // Update the score in the database
+  //     await updateScore(player.name, newScore);
+  //   } catch (error) {
+  //     console.error("Failed to update score:", error);
+  //   }
+  // };
 
   return (
     <div className="container mx-auto p-4">
